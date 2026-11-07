@@ -1,0 +1,1 @@
+{"id": "./", "name": "TEMPO \u2014 Workout timer", "short_name": "TEMPO", "lang": "en", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#131611", "theme_color": "#131611", "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]}
