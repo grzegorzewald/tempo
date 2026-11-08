@@ -6,3 +6,31 @@ main{grid-template-columns:minmax(0,1fr)}.digits{font-size:min(24vw,36vh);line-h
 @media(max-width:650px) and (orientation:portrait){main{display:grid}.timer-panel{min-height:0}.digits{font-size:26vw}.phase{font-size:16px}.cycle{margin-top:12px}.cycle strong{font-size:26px}.timer-top{align-items:center}.timer-center{gap:6px}.controls{margin-top:24px}.start,.reset{height:52px}.timer-bottom{padding-bottom:8px}.next{font-size:9px}.top-right{gap:10px}#settingsDialog{padding:20px}#settingsDialog .fields{margin-top:14px}#settingsDialog .stepper{height:48px}#settingsDialog .tabs button{padding:10px}#settingsDialog .settings-tools{margin-top:14px}}
 @media(orientation:landscape) and (max-height:600px){main{grid-template-columns:minmax(0,1fr)}.digits{font-size:min(30vw,38vh)}.timer-top{flex-wrap:nowrap}.timer-center{gap:0}.phase{font-size:12px}.cycle{font-size:10px}.cycle strong{font-size:21px}#settingsDialog{width:min(700px,calc(100vw - 28px));padding:14px 20px}#settingsDialog aside{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;align-items:start}#settingsDialog .settings-heading{grid-column:1/-1;margin:0 0 10px}#settingsDialog .tabs{grid-column:1;grid-row:2}#settingsDialog .description{display:none}#settingsDialog .fields{grid-column:2;grid-row:2 / span 3;margin:0;grid-template-columns:1fr 1fr;gap:10px}#settingsDialog #mmomSettings{grid-template-columns:1fr}#settingsDialog label>span{font-size:11px}#settingsDialog .fields small{display:none}#settingsDialog .stepper{height:42px}#settingsDialog .stepper button{width:30px}#settingsDialog .stepper input{font-size:24px}#settingsDialog .save{grid-column:2;grid-row:5;margin-top:10px;padding:9px}#settingsDialog details{grid-column:1;grid-row:3 / span 3;margin-top:10px}#settingsDialog #presetList{max-height:80px;grid-template-columns:repeat(4,1fr)}#settingsDialog .settings-tools{grid-column:1;grid-row:6;border-top:0;margin-top:10px;padding-top:0;gap:12px}#settingsDialog .settings-done{grid-column:2;grid-row:6;margin-top:10px;padding:10px}#settingsDialog .tabs button{padding:9px}#settingsDialog summary{padding:10px 0}}
 .top-right{gap:12px}@media(max-width:650px){.top-right{gap:2px}#clock{padding-left:8px;font-size:21px}.top-right .icon-btn{padding:6px;font-size:22px}.top-right #settingsOpen{font-size:24px}.top-right .text-btn{padding:6px}.brand{gap:6px}}@media(orientation:landscape) and (max-height:600px){#settingsDialog .settings-done{grid-column:1/-1}}
+/* Layout A: touch phones in landscape only. */
+@media (orientation:landscape) and (max-height:600px) and (max-width:1100px) and (hover:none) and (pointer:coarse){
+  .app{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:env(safe-area-inset-bottom)}
+  header{height:50px;min-height:44px}
+  header .top-right .icon-btn,header .top-right .text-btn{min-width:44px;min-height:44px}
+  main{padding:8px 0;display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+  .timer-panel{display:grid;grid-template-columns:minmax(0,1fr) 104px;grid-template-rows:minmax(0,1fr) 3px auto;column-gap:24px;row-gap:10px;padding:14px 16px 12px 24px;min-height:0;border-radius:12px}
+  .timer-top,.shortcut,footer{display:none}
+  .timer-center{grid-column:1;grid-row:1;container-type:inline-size;align-items:flex-start;justify-content:center;gap:0;min-width:0}
+  .phase{font-size:clamp(14px,4dvh,22px);letter-spacing:2px;line-height:1.2}
+  .digits{font-size:min(31cqw,46dvh);line-height:1.05;letter-spacing:-.065em;max-width:100%}
+  .cycle{font-size:12px;letter-spacing:1px;gap:8px;line-height:1.2}
+  .cycle strong,.cycle span{font-size:22px}
+  .timer-bottom{display:contents}
+  .progress{grid-column:1;grid-row:2}
+  .next{grid-column:1;grid-row:3;justify-content:flex-start;font-size:10px;letter-spacing:.7px;margin:0;line-height:1.4}
+  .next #modeLabel{display:none}
+  .next b{margin-left:6px}
+  .controls{grid-column:2;grid-row:1 / -1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;border-left:1px solid var(--border);margin:0;padding-left:16px}
+  .controls .start{order:0;width:72px;height:72px;min-height:72px;border-radius:50%;font-size:0;padding:0;display:flex;align-items:center;justify-content:center}
+  .controls .start span{font-size:28px;margin:0;line-height:1}
+  .controls .reset{order:1;width:56px;height:56px;min-height:56px;border-radius:50%;border:2px solid #89977b;background:transparent;font-size:30px;padding:0}
+}
+@media (orientation:landscape) and (max-height:350px) and (max-width:1100px) and (hover:none) and (pointer:coarse){
+  header{height:44px}.timer-panel{grid-template-columns:minmax(0,1fr) 88px;column-gap:16px;row-gap:6px;padding:10px 12px 10px 16px}
+  .controls{gap:16px;padding-left:12px}.controls .start{width:60px;height:60px;min-height:60px}.controls .reset{width:48px;height:48px;min-height:48px}
+  .cycle strong,.cycle span{font-size:18px}.next{font-size:9px}
+}
