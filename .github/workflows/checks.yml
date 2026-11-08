@@ -1,0 +1,39 @@
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - name: Check JavaScript syntax
+        run: |
+          for file in dist/*.js; do
+            node --check "$file"
+          done
+      - name: Validate manifests
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, existsSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const hosting = JSON.parse(readFileSync('.openai/hosting.json', 'utf8'));
+          assert(existsSync(`${hosting.static.directory}/index.html`));
+          for (const path of ['dist/manifest.webmanifest', 'dist/manifest-en.webmanifest']) {
+            const manifest = JSON.parse(readFileSync(path, 'utf8'));
+            assert(manifest.name && manifest.start_url && manifest.icons.length);
+            for (const icon of manifest.icons) assert(existsSync(`dist/${icon.src}`));
+          }
+          JS
