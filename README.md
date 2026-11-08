@@ -2,7 +2,7 @@
 
 Full-screen fitness timer with Polish and English interfaces, selected from the browser language.
 
-- MMoM: a configured number of one-minute cycles.
+- EMoM: a configured number of one-minute cycles.
 - Intervals: alternating work and rest durations, with cycles starting at 1.
 - Countdown and transition sounds; mobile audio initialization.
 - Up to 16 presets and settings stored in localStorage. No application database.
