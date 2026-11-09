@@ -28,6 +28,18 @@ Open http://localhost:8000. Audio is enabled through user interaction. Offline i
 
 There are no npm dependencies to update. Add a Dependabot ecosystem entry if package dependencies are introduced.
 
-## Deployment
+## Contributing
 
-Serve `dist/` over HTTPS. The existing Sites deployment remains separate from this GitHub repository; pushing here does not automatically redeploy it. When changing cached application files, increment the cache version in `dist/sw.js`.
+Use Conventional Commits for commits and PR titles, such as `feat: add presets` or `fix: restore sound`. Squash merges must retain the conventional PR title; release-please uses it to choose the next version. Use `feat/` branches for features.
+
+Run the dependency-free unit tests with `node --test`. Every PR runs them alongside JavaScript syntax and manifest validation. The compact issue and PR templates cover both bugs and small improvements.
+
+## Releases and deployment
+
+Release-please opens a release PR on `main` from Conventional Commits. Merging that PR creates a GitHub release and deploys its exact commit from `dist/` to GitHub Pages in the same workflow. Ordinary feature merges do not deploy. The initial version is `0.1.0`.
+
+Release-please keeps `version.txt`, `.release-please-manifest.json`, and `dist/version.json` in sync. The About dialog reads the JSON file, including offline, so its version matches the release. Release artifacts receive a version-specific service worker cache.
+
+One-time repository settings: select **GitHub Actions** under **Settings → Pages → Build and deployment**, and enable **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General**. The workflow uses the built-in `GITHUB_TOKEN`; no personal token is required. If branch protection requires checks on release-please PRs, set the optional `RELEASE_PLEASE_TOKEN` secret to a GitHub App token (or a fine-grained token with contents and pull requests write access), since PRs created by `GITHUB_TOKEN` do not trigger other workflows automatically.
+
+For other hosts, serve `dist/` over HTTPS. The existing Sites deployment remains separate. When changing cached app files, increment the cache version in `dist/sw.js` and precache any new offline assets.
