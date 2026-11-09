@@ -3,6 +3,7 @@ name: Release and deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,6 +14,7 @@ concurrency:
 
 jobs:
   release:
+    name: Create release PR or publish release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,6 +23,27 @@ jobs:
       released: ${{ steps.release.outputs.release_created }}
       tag: ${{ steps.release.outputs.tag_name }}
     steps:
+      - name: Check release PR permissions
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          GH_API_URL: ${{ github.api_url }}
+          GH_REPOSITORY: ${{ github.repository }}
+          HAS_RELEASE_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN != '' }}
+        run: |
+          node --input-type=module <<'JS'
+          // Custom tokens use their own permissions rather than this Actions setting.
+          if (process.env.HAS_RELEASE_TOKEN === 'true') process.exit(0);
+          const settings = `https://github.com/${process.env.GH_REPOSITORY}/settings/actions`;
+          const response = await fetch(`${process.env.GH_API_URL}/repos/${process.env.GH_REPOSITORY}/actions/permissions/workflow`, {
+            headers: { Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: 'application/vnd.github+json' }
+          });
+          if (!response.ok) {
+            console.log(`::warning::Cannot inspect repository Actions settings (HTTP ${response.status}). If release PR creation is denied, enable "Allow GitHub Actions to create and approve pull requests" at ${settings}, or configure RELEASE_PLEASE_TOKEN.`);
+          } else if (!(await response.json()).can_approve_pull_request_reviews) {
+            console.log(`::error::Release PR creation is disabled. Enable "Allow GitHub Actions to create and approve pull requests" at ${settings}, then rerun this workflow. An organization policy may also need to allow it. Alternatively configure RELEASE_PLEASE_TOKEN.`);
+            process.exit(1);
+          }
+          JS
       - uses: googleapis/release-please-action@8b8fd2cc23b2e18957157a9d923d75aa0c6f6ad5 # v4
         id: release
         with:
@@ -30,6 +53,7 @@ jobs:
           manifest-file: .release-please-manifest.json
 
   deploy:
+    name: Deploy released site to GitHub Pages
     needs: release
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest

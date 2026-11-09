@@ -23,7 +23,7 @@ Open http://localhost:8000. Audio is enabled through user interaction. Offline i
 
 - `dist/`: application source and directly deployable static files.
 - `.openai/hosting.json`: existing Sites project identity and static hosting configuration.
-- `.github/workflows/checks.yml`: JavaScript and manifest validation on pushes, pull requests, weekly, and on demand.
+- `.github/workflows/checks.yml`: Unit tests and static validation on pushes, pull requests, weekly, and on demand.
 - `.github/dependabot.yml`: weekly GitHub Actions dependency update checks, Mondays at 08:00 Europe/Warsaw.
 
 There are no npm dependencies to update. Add a Dependabot ecosystem entry if package dependencies are introduced.
@@ -43,3 +43,5 @@ Release-please uses its Node strategy to keep the JSON versions in `package.json
 One-time repository settings: select **GitHub Actions** under **Settings → Pages → Build and deployment**, and enable **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General**. The workflow uses the built-in `GITHUB_TOKEN`; no personal token is required. If branch protection requires checks on release-please PRs, set the optional `RELEASE_PLEASE_TOKEN` secret to a GitHub App token (or a fine-grained token with contents and pull requests write access), since PRs created by `GITHUB_TOKEN` do not trigger other workflows automatically.
 
 For other hosts, serve `dist/` over HTTPS. The existing Sites deployment remains separate. When changing cached app files, increment the cache version in `dist/sw.js` and precache any new offline assets.
+
+If release-please reports **GitHub Actions is not permitted to create or approve pull requests**, enable the Actions setting above (an organization policy may also restrict it), then rerun **Release and deploy** from the Actions tab. The workflow supports manual runs. Workflow `pull-requests: write` alone does not enable this repository setting. A failed attempt can leave a release branch; release-please reuses it on retry.
