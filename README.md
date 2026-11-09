@@ -38,7 +38,7 @@ Run the dependency-free unit tests with `node --test`. Every PR runs them alongs
 
 Release-please opens a release PR on `main` from Conventional Commits. Merging that PR creates a GitHub release and deploys its exact commit from `dist/` to GitHub Pages in the same workflow. Ordinary feature merges do not deploy. The initial version is `0.1.0`.
 
-Release-please keeps `version.txt`, `.release-please-manifest.json`, and `dist/version.json` in sync. The About dialog reads the JSON file, including offline, so its version matches the release. Release artifacts receive a version-specific service worker cache.
+Release-please uses its Node strategy to keep the JSON versions in `package.json`, `.release-please-manifest.json`, and `dist/version.json` in sync. There are no npm dependencies or build step. `dist/version.json` also holds `repository`, `homepage` (Pages URL), and `bugs` (issue tracker URL); edit these to change the About dialog links. Release updates change only its version and preserve these URLs. The About dialog reads the JSON file, including offline, so its version matches the release. Release artifacts receive a version-specific service worker cache.
 
 One-time repository settings: select **GitHub Actions** under **Settings → Pages → Build and deployment**, and enable **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General**. The workflow uses the built-in `GITHUB_TOKEN`; no personal token is required. If branch protection requires checks on release-please PRs, set the optional `RELEASE_PLEASE_TOKEN` secret to a GitHub App token (or a fine-grained token with contents and pull requests write access), since PRs created by `GITHUB_TOKEN` do not trigger other workflows automatically.
 

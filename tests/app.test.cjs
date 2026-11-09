@@ -37,7 +37,7 @@ function app({ storage = {}, locale = 'en-US', failWrites = false } = {}) {
     addEventListener: (name, handler) => { events[name] = handler; },
   };
   const context = vm.createContext({
-    document, navigator: { languages: [locale] }, NodeFilter: { SHOW_TEXT: 4 },
+    URL, document, navigator: { languages: [locale] }, NodeFilter: { SHOW_TEXT: 4 },
     localStorage: {
       getItem: key => values.get(key) ?? null,
       setItem: (key, value) => { if (failWrites) throw Error('quota'); values.set(key, value); },
@@ -45,7 +45,7 @@ function app({ storage = {}, locale = 'en-US', failWrites = false } = {}) {
     performance: { now: () => now },
     window: { addEventListener() {} },
     setTimeout: () => 1, clearTimeout() {}, setInterval() {},
-    fetch: async () => ({ ok: true, json: async () => ({ version: '0.1.0' }) }),
+    fetch: async () => ({ ok: true, json: async () => ({ version: '0.1.0', repository: 'https://example.com/repo', homepage: 'https://example.com/app/', bugs: 'https://example.com/issues' }) }),
   });
   for (const file of ['i18n.js', 'app.js']) {
     vm.runInContext(readFileSync(path.join(__dirname, '../dist', file), 'utf8'), context);
@@ -183,4 +183,7 @@ test('About dialog opens and closes and displays the release JSON version', asyn
   assert.equal(a.get('aboutDialog').open, false);
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(a.get('appVersion').textContent, '0.1.0');
+  assert.equal(a.get('repositoryLink').href, 'https://example.com/repo');
+  assert.equal(a.get('pagesLink').href, 'https://example.com/app/');
+  assert.equal(a.get('issuesLink').href, 'https://example.com/issues');
 });

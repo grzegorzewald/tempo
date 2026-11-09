@@ -49,6 +49,11 @@ fetch('./version.json').then(response=>{
 }).then(data=>{
   if(typeof data.version!=='string'||!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(data.version))throw new Error('Invalid version');
   $('appVersion').textContent=data.version;
+  for(const [id,key] of [['repositoryLink','repository'],['pagesLink','homepage'],['issuesLink','bugs']]){
+    const url=new URL(data[key]);
+    if(url.protocol!=='https:'&&url.protocol!=='http:')throw new Error('Invalid project URL');
+    $(id).href=url.href;
+  }
 }).catch(()=>{$('appVersion').textContent=t('Wersja niedostępna')});
 $('aboutOpen').onclick=()=>$('aboutDialog').showModal();
 $('aboutClose').onclick=()=>$('aboutDialog').close();
