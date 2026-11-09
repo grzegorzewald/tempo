@@ -34,3 +34,6 @@ main{grid-template-columns:minmax(0,1fr)}.digits{font-size:min(24vw,36vh);line-h
   .controls{gap:16px;padding-left:12px}.controls .start{width:60px;height:60px;min-height:60px}.controls .reset{width:48px;height:48px;min-height:48px}
   .cycle strong,.cycle span{font-size:18px}.next{font-size:9px}
 }
+
+#aboutDialog{width:min(420px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto}#aboutDialog h2{font-size:20px;margin:6px 30px 20px 0}#aboutDialog a{color:var(--accent);text-underline-offset:3px}#aboutDialog a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}#aboutOpen{font-weight:650}
+@media(max-width:370px) and (orientation:portrait){header .brand{font-size:17px;gap:3px}header .brand .mark{font-size:23px}header .top-right{gap:0}header .top-right .icon-btn,header .top-right .text-btn{padding:5px}header #clock{font-size:18px;padding-left:5px}}
