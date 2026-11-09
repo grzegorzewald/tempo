@@ -44,4 +44,4 @@ One-time repository settings: select **GitHub Actions** under **Settings → Pag
 
 For other hosts, serve `dist/` over HTTPS. The existing Sites deployment remains separate. When changing cached app files, increment the cache version in `dist/sw.js` and precache any new offline assets.
 
-If release-please reports **GitHub Actions is not permitted to create or approve pull requests**, enable the Actions setting above (an organization policy may also restrict it), then rerun **Release and deploy** from the Actions tab. The workflow supports manual runs. Workflow `pull-requests: write` alone does not enable this repository setting. A failed attempt can leave a release branch; release-please reuses it on retry.
+If release-please reports **GitHub Actions is not permitted to create or approve pull requests**, enable the Actions setting above (an organization policy may also restrict it), then the next push to `main` will retry. The release workflow runs only on pushes to `main`. Workflow `pull-requests: write` alone does not enable this repository setting. A failed attempt can leave a release branch; release-please reuses it on retry.

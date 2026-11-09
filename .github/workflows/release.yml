@@ -3,7 +3,6 @@ name: Release and deploy
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -40,7 +39,7 @@ jobs:
           if (!response.ok) {
             console.log(`::warning::Cannot inspect repository Actions settings (HTTP ${response.status}). If release PR creation is denied, enable "Allow GitHub Actions to create and approve pull requests" at ${settings}, or configure RELEASE_PLEASE_TOKEN.`);
           } else if (!(await response.json()).can_approve_pull_request_reviews) {
-            console.log(`::error::Release PR creation is disabled. Enable "Allow GitHub Actions to create and approve pull requests" at ${settings}, then rerun this workflow. An organization policy may also need to allow it. Alternatively configure RELEASE_PLEASE_TOKEN.`);
+            console.log(`::error::Release PR creation is disabled. Enable "Allow GitHub Actions to create and approve pull requests" at ${settings}, the next push to main will retry. An organization policy may also need to allow it. Alternatively configure RELEASE_PLEASE_TOKEN.`);
             process.exit(1);
           }
           JS
