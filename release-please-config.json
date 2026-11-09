@@ -8,7 +8,7 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "dist/version.json",
+          "path": "dist/app-metadata.json",
           "jsonpath": "$.version"
         }
       ]

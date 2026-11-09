@@ -43,7 +43,7 @@ $('settingsDialog').addEventListener('click',e=>{if(e.target===$('settingsDialog
 document.addEventListener('pointerdown',()=>{if(running&&!muted&&audio?.state!=='running')unlock()},{passive:true});
 
 // Keep the displayed version in sync with the release-managed JSON, also offline.
-fetch('./version.json').then(response=>{
+fetch('./app-metadata.json').then(response=>{
   if(!response.ok)throw new Error('Version unavailable');
   return response.json();
 }).then(data=>{
