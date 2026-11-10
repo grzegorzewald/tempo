@@ -32,8 +32,7 @@ jobs:
           node --input-type=module <<'JS'
           import { readFileSync, existsSync } from 'node:fs';
           import assert from 'node:assert/strict';
-          const hosting = JSON.parse(readFileSync('.openai/hosting.json', 'utf8'));
-          assert(existsSync(`${hosting.static.directory}/index.html`));
+          assert(existsSync('dist/index.html'));
           for (const path of ['dist/manifest.webmanifest', 'dist/manifest-en.webmanifest']) {
             const manifest = JSON.parse(readFileSync(path, 'utf8'));
             assert(manifest.name && manifest.start_url && manifest.icons.length);
