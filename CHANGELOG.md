@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/grzegorzewald/tempo/compare/v0.2.0...v0.2.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* make countdown beeps louder with a sustained final tone ([#5](https://github.com/grzegorzewald/tempo/issues/5)) ([409a3f4](https://github.com/grzegorzewald/tempo/commit/409a3f420cfb47d7b713d0a1e1ea9d07ceb7ada4))
+
 ## [0.2.0](https://github.com/grzegorzewald/tempo/compare/v0.1.0...v0.2.0) (2026-11-09)
 
 
