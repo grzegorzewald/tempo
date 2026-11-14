@@ -187,3 +187,57 @@ test('About dialog opens and closes and displays the release JSON version', asyn
   assert.equal(a.get('pagesLink').href, 'https://example.com/app/');
   assert.equal(a.get('issuesLink').href, 'https://example.com/issues');
 });
+
+test('interval and EMoM countdowns play four short beeps then one long transition', () => {
+  for (const mode of ['interval', 'mmom']) {
+    const a = app();
+    if (mode === 'mmom') {
+      a.get('mmom').click();
+      a.run("change('minutes',1)");
+    }
+    a.run('globalThis.tones=[];beep=(long=false)=>tones.push(long)');
+    a.get('start').click();
+    a.run('tones.length=0');
+    a.advance(mode === 'mmom' ? 55000 : 35000);
+    assert.deepEqual(Array.from(a.run('tones')), []);
+    for (let i = 0; i < 4; i++) {
+      a.advance(1000);
+      a.advance(80); // Repeated ticks must not duplicate the current second.
+    }
+    a.advance(680);
+    assert.deepEqual(Array.from(a.run('tones')), [false, false, false, false, true]);
+    if (mode === 'mmom') assert.equal(a.state().finished, true);
+  }
+});
+
+test('beeps sustain higher gain and the final tone lasts one second', () => {
+  const a = app();
+  a.run(`
+    globalThis.envelope=[];
+    globalThis.stops=[];
+    muted=false;
+    audio={
+      state:'running',currentTime:10,destination:{},
+      createOscillator:()=>({
+        frequency:{},connect(){},disconnect(){},start(){},
+        stop(time){stops.push(time);this.onended()}
+      }),
+      createGain:()=>({
+        connect(){},disconnect(){},
+        gain:{
+          setValueAtTime(value,time){envelope.push([value,time])},
+          linearRampToValueAtTime(value,time){envelope.push([value,time])}
+        }
+      })
+    };
+    beep();beep(true);
+  `);
+  assert.deepEqual(Array.from(a.run('stops')), [10.2, 11]);
+  const envelope = JSON.parse(a.run('JSON.stringify(envelope)'));
+  assert.deepEqual(envelope, [
+    [0, 10], [.8, 10.01], [.8, 10.17], [0, 10.2],
+    [0, 10], [.8, 10.01], [.8, 10.97], [0, 11],
+  ]);
+  a.run('muted=true;beep();beep(true)');
+  assert.equal(a.run('stops.length'), 2);
+});
